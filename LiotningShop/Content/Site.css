@@ -1,0 +1,71 @@
+﻿table.sorting tr:not(.home) {
+    cursor:pointer;
+}
+
+.ui-state-highlight {
+    border: 1px dashed #ccc;
+}
+
+div.new-cat {
+    margin-top: 30px;
+    position: relative;
+}
+
+span.ajax-text{
+    display: none;
+}
+
+table.sorting.categories td {
+    padding: 20px !important;
+}
+
+.ajaxdivtd {
+    position: absolute;
+}
+
+span.loader {
+    display: none;
+}
+
+.ajaxmsg {
+    background: green;
+    color: white;
+    padding: 10px;
+    display: none;
+    position: absolute;
+    bottom: 0;
+}
+
+.ajaxcart {
+    position: relative;
+    top: 5px;
+}
+
+.ib {
+    display: inline-block !important;
+}
+
+ul.adminarea {
+    position: relative;
+    top: 15px;
+}
+
+.ajaxbg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: none;
+    z-index: 1;
+}
+
+.ajaxbg span {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+}
+
+form.paypalform {
+    position: absolute;
+    left: -2000px;
+}

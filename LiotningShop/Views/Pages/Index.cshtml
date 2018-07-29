@@ -1,0 +1,8 @@
+﻿@model LiotningShop.Models.ViewModels.Pages.PageVM
+
+@{
+    ViewBag.Title = ViewBag.PageTitle;
+    TempData["PageTitle"] = ViewBag.PageTitle;
+}
+
+@Html.Raw(Model.Body)

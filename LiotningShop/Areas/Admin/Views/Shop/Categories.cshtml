@@ -1,0 +1,168 @@
+﻿@model IEnumerable<LiotningShop.Models.ViewModels.Shop.CategoryVM>
+
+@{
+    ViewBag.Title = "Categories";
+}
+
+<h2>Categories</h2>
+
+<div class="">
+    <input type="text" id="newcatname" />
+    <p>
+        <a href="#" id="newcata">Add new category</a>
+        <span class="ajax-text">
+            <img src="~/Content/img/ajax-loader.gif" />
+        </span>
+    </p>
+</div>
+@if (!Model.Any())
+{
+    <h1 class="text-center">There are no categories</h1>
+}
+else
+{
+    <table class="table sorting categories" id="pages">
+        <tr class="home">
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr id="id_@item.Id">
+                <td>
+                    <div class="ajaxdivtd"></div>
+                    @Html.EditorFor(modelItem => item.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "DeleteCategory", new { id = item.Id }, new { @class = "delete" })
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <script>
+
+    $(function () {
+
+        var newCatA = $("a#newcata");
+        var newCatTextInput = $("#newcatname");
+        var ajaxText = $("span.ajax-text");
+        var table = $("table#pages tbody");
+
+        newCatTextInput.keyup(function (e) {
+            if (e.keyCode == 13) {
+                newCatA.click();
+            }
+        });
+
+        newCatA.click(function (e) {
+            e.preventDefault();
+            var catName = newCatTextInput.val();
+            if (catName.length < 2) {
+                alert("Category name must be atleast 2 characters.");
+                return false;
+            }
+            ajaxText.show();
+            var url = "/admin/shop/AddNewCategory"
+
+            $.post(url, { catName: catName }, function (data) {
+                var response = data.trim();
+                if (response == "titletaken") {
+                    ajaxText.html("<span class='alert alert-danger'>That title is taken!</span>");
+                    setTimeout(function (data) {
+                        ajaxText.fadeOut("fast", function () {
+                            ajaxText.html("<img src='/Content/img/ajax-loader.gif' />");
+                        });
+                    }, 2000);
+                    return false;
+                } else {
+                    if (!$("table#pages").length) {
+                        location.reload()
+                    } else {
+                        ajaxText.html("<span class='alert alert-success'>Category has been added!</span>");
+                        setTimeout(function (data) {
+                            ajaxText.fadeOut("fast", function () {
+                                ajaxText.html("<img src='/Content/img/ajax-loader.gif' />");
+                            });
+                        }, 2000);
+                        newCatTextInput.val("");
+                        var toAppend = $("table#pages tbody tr:last").clone();
+                        toAppend.attr("id", "_id" + data);
+                        toAppend.find("#item_Name").val(catName);
+                        toAppend.find("a.delete").attr("href", "/admin/shop/DeleteCategory/" + data);
+                        table.append(toAppend);
+                        table.sortable("refresh");
+                    }
+                }
+            });
+        });
+
+        $("table#pages tbody").sortable({
+            items: "tr:not(.home)",
+            placeholder: "ui-state-highlight",
+            update: function () {
+                var ids = $("table#pages tbody").sortable("serialize");
+                var url = "/Admin/Pages/ReorderCategories";
+                $.post(url, ids, function (data) {
+
+                });
+            }
+        });
+
+        $("body").on("click", "a.delete", function () {
+            if (!confirm("Confirm page deletion")) {
+                return false;
+            }
+        });
+
+        var originalTextBoxValue;
+
+        $("table#pages input.text-box").dblclick(function () {
+            originalTextBoxValue = $(this).val();
+            $(this).attr("readonly", false);
+        });
+
+        $("table#pages input.text-box").keyup(function (e) {
+            if (e.keyCode == 13) {
+                $(this).blur();
+            }
+        });
+
+        $("table#pages input.text-box").blur(function () {
+            var $this = $(this);
+            var ajaxdiv = $this.parent().find(".ajaxdivtd");
+            var newCatName = $this.val();
+            var id = $this.parent().parent().attr("id").substring(3);
+            var url = "/admin/shop/RenameCategory";
+
+            if (newCatName.length < 2) {
+                alert("Category name must be atleast 2 characters.");
+                $this.attr("readonly", false);
+                return false;
+            }
+            $.post(url, { newCatName: newCatName, id: id }, function (data) {
+                var response = data.trim();
+                if (response == "titletaken") {
+                    $this.val(originalTextBoxValue);
+                    ajaxdiv.html("<span class='alert alert-danger'>Title has already taken!</span>").show();
+                } else {
+                    ajaxdiv.html("<span class='alert alert-success'>Category has been changed!</span>").show();
+                }
+                setTimeout(function (data) {
+                    ajaxdiv.fadeOut("fast", function () {
+                        ajaxdiv.html("<img src='/Content/img/ajax-loader.gif' />");
+                    });
+                }, 2000);
+            }).done(function () {
+                $this.attr("readonly", true);
+            });
+        });
+    });
+    </script>
+}
