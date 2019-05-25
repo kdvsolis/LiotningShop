@@ -12,6 +12,6 @@ https://www.udemy.com/aspnet-mvc-5-project-cms-and-shopping-cart-with-paypal/
 ## Product Category Page
  ![Product Category Page](https://raw.githubusercontent.com/kdvsolis/LiotningShop/master/screenshots/ProductCategoryPage.PNG)
 ## Product Detail Page
- ![Product Detail Page](https://raw.githubusercontent.com/kdvsolis/LiotningShop/master/screenshots/ProductDetail.PNG)
+ ![Product Detail Page](https://raw.githubusercontent.com/kdvsolis/LiotningShop/master/screenshots/ProductDetailPage.PNG)
 ## Product Checkout Page
- ![Product Checkout Page](https://raw.githubusercontent.com/kdvsolis/LiotningShop/master/screenshots/ProductCheckoutPage.PNG)
+ ![Product Checkout Page](https://raw.githubusercontent.com/kdvsolis/LiotningShop/master/screenshots/ProductCheckout.PNG)
